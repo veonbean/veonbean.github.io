@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>设计模式-代理</title>
+    <url>/2020/12/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<blockquote>
+<p>为其他对象提供一种代理以控制对这个对象的访问。</p>
+</blockquote>
+<p>代理模式是为一个对象提供一个代用品或占位符，以便控制对它的访问。</p>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><ul>
+<li><p>保护代理</p>
+<blockquote>
+<p>用代理对象控制对原始对象的访问，常用于鉴权。</p>
+</blockquote>
+</li>
+<li><p>虚拟代理</p>
+<blockquote>
+<p>把一些开销很大的对象，延迟到真正需要它的时候才去创建。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h2><p>使用虚拟代理实现图片预加载</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> myImg = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> imgNode = <span class="built_in">document</span>.createElement(<span class="string">&#x27;img&#x27;</span>);</span><br><span class="line">  <span class="built_in">document</span>.body.appendChild(imgNode);</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    setSrc: <span class="function">(<span class="params">src</span>) =&gt;</span> &#123;</span><br><span class="line">      imgNode.src = src;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line"><span class="keyword">const</span> proxyImage = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> img = <span class="keyword">new</span> Image();</span><br><span class="line">  img.onload = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    myImg.setSrc(img.src);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    setSrc: <span class="function"><span class="params">src</span> =&gt;</span> &#123;</span><br><span class="line">      img.src = src;</span><br><span class="line">      myImage.setSrc(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line">proxyImage.setSrc(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>手写Promise</title>
+    <url>/2020/12/14/%E6%89%8B%E5%86%99Promise/</url>
+    <content><![CDATA[<blockquote>
+<p>Promise对象用于表示一个异步操作的最终完成（或失败）及其结果值。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>JavaScript标准内置对象</category>
+      </categories>
+      <tags>
+        <tag>Promise</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式-单例</title>
+    <url>/2020/12/09/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BE%8B/</url>
+    <content><![CDATA[<blockquote>
+<p>保证一个类只有一个实例，并提供一个访问它的全局访问点。如线程池、window对象、全局缓存等只需要一个实例的对象。</p>
+</blockquote>
+<h3 id="实现单例模式"><a href="#实现单例模式" class="headerlink" title="实现单例模式"></a>实现单例模式</h3><p>使用一个变量来标识是否已经为当前类创建过实例，在获取该类实例的时候进行判断，若是则返回缓存的实例，否则创建一个新的实例并返回。</p>
+<ol>
+<li><p>使用全局变量</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> instance = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getInstance</span>(<span class="params">arg</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!instance) &#123;</span><br><span class="line">    instance = arg;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> a = getInstance(<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> b = getInstance(<span class="string">&#x27;b&#x27;</span>);</span><br><span class="line"></span><br><span class="line">a === b;</span><br><span class="line"><span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>缺点：必须不利于代码复用。</p>
+</blockquote>
+</li>
+<li><p>使用闭包</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Singleton</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.name = name;</span><br><span class="line">&#125;</span><br><span class="line">SingleTon.getInstance = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> instance = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!instance) &#123;</span><br><span class="line">      instance = <span class="keyword">new</span> Singleton(name);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> a = Singleton.getInstance(<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> b = Singleton.getInstance(<span class="string">&#x27;b&#x27;</span>);</span><br><span class="line"></span><br><span class="line">a === b;</span><br><span class="line"><span class="comment">// true</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用函数</p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Singleton</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.name = name;</span><br><span class="line">  <span class="built_in">this</span>.instance = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line">Singleton.getInstance = <span class="function"><span class="keyword">function</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="built_in">this</span>.instance) &#123;</span><br><span class="line">    <span class="built_in">this</span>.instance = <span class="keyword">new</span> Singleton(name);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">this</span>.instance;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> a = Singleton.getInstance(<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> b = Singleton.getInstance(<span class="string">&#x27;b&#x27;</span>);</span><br><span class="line">a === b;</span><br><span class="line"><span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>缺点：必须使用getInstance获取实例，而不是使用new</p>
+</blockquote>
+<ol start="4">
+<li>使用class</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; name, ...other &#125; = props;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="built_in">this</span>.instance = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  setName = <span class="function">(<span class="params">name</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.name = name;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">static</span> getInstance = <span class="function">(<span class="params">name</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.instance = <span class="built_in">this</span>.instance ? <span class="built_in">this</span>.instance : <span class="keyword">new</span> Singleton(name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> a = Singleton.getInstance(<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> b = Singleton.getInstance(<span class="string">&#x27;b&#x27;</span>);</span><br><span class="line"></span><br><span class="line">a === b;</span><br><span class="line"><span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>类通过static定义的方法，不能在实例中调用，应该通过类本身进行调用。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">name</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> Singleton.instance === <span class="string">&#x27;object&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> Singleton.instance;</span><br><span class="line">    &#125;</span><br><span class="line">    Singleton.instance = <span class="built_in">this</span>;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> a = <span class="keyword">new</span> Singleton(<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> b = <span class="keyword">new</span> Singleton(<span class="string">&#x27;b&#x27;</span>);</span><br><span class="line">a === b;</span><br><span class="line"><span class="comment">// true</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式-命令</title>
+    <url>/2020/12/22/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<blockquote>
+<p>将一个请求封装成一个对象，从而使你可用不同的请求对客户进行参数化，对请求进行排队或记录请求日志，以及支持可撤销的操作。</p>
+</blockquote>
+<p>命令模式是指，将请求封装成一个命令，然后执行该命令。</p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式-发布订阅</title>
+    <url>/2020/12/22/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85/</url>
+    <content><![CDATA[<blockquote>
+<p>定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。</p>
+</blockquote>
+<p>观察者模式又称发布-订阅模式。它是一种通知机制，让发送通知的一方（被观察方）和接收通知的一方（观察者）能彼此分离，互不影响。</p>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ul>
+<li>优点<br>时间上、对象上解耦</li>
+<li>缺点<br>创建订阅者需要一定的时间和内存，订阅的消息未必发生，但观察者始终存在</li>
+</ul>
+<h2 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h2><h3 id="电商网站"><a href="#电商网站" class="headerlink" title="电商网站"></a>电商网站</h3><p>假设一个电商网站，有多种商品（Product），消费者（Customer）和管理员（Admin）对商品上架和价格改变都感兴趣，希望可以得到第一时间的通知，商场可以这么写：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 商场</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Store</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 产品列表</span></span><br><span class="line">  <span class="built_in">this</span>.product = &#123;&#125;;</span><br><span class="line">  <span class="comment">// 观察者列表</span></span><br><span class="line">  <span class="built_in">this</span>.observers = [];</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 消费者</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Customer</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.name = name;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 管理员</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Admin</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.name = name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加新商品</span></span><br><span class="line">Store.prototype.addNewProduct = <span class="function"><span class="keyword">function</span>(<span class="params">name, price</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.product[name] = price;</span><br><span class="line">  <span class="comment">// 通知观察者</span></span><br><span class="line">  <span class="built_in">this</span>.observers.forEach(<span class="function"><span class="params">item</span> =&gt;</span> item.observer.onPublish(&#123;name, price&#125;));</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 修改商品价格</span></span><br><span class="line">Store.prototype.setProductPrice = <span class="function"><span class="keyword">function</span>(<span class="params">name, price</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.product[name] = price;</span><br><span class="line">  <span class="comment">// 通知观察者</span></span><br><span class="line">  <span class="built_in">this</span>.observers.forEach(<span class="function"><span class="params">item</span> =&gt;</span> item.observer.onPriceChange(&#123;name, price&#125;));</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 注册观察者</span></span><br><span class="line">Store.prototype.addObserver = <span class="function"><span class="keyword">function</span>(<span class="params">name, observer</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.observers.push(&#123;</span><br><span class="line">    name,</span><br><span class="line">    observer,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 移除观察者</span></span><br><span class="line">Store.prototype.removeObserver = <span class="function"><span class="keyword">function</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.observers = <span class="built_in">this</span>.observers.filter(<span class="function"><span class="params">item</span> =&gt;</span> item.name !== name);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 收到通知后触发事件</span></span><br><span class="line">Customer.prototype.onPublish = <span class="function"><span class="keyword">function</span>(<span class="params">product</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`顾客<span class="subst">$&#123;<span class="built_in">this</span>.name&#125;</span>，有新商品<span class="subst">$&#123;product.name&#125;</span>上架，价格为<span class="subst">$&#123;product.price&#125;</span>`</span>);</span><br><span class="line">&#125;;</span><br><span class="line">Customer.prototype.onPriceChange = <span class="function"><span class="keyword">function</span>(<span class="params">product</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`顾客<span class="subst">$&#123;<span class="built_in">this</span>.name&#125;</span>，商品<span class="subst">$&#123;product.name&#125;</span>价格变更为<span class="subst">$&#123;product.price&#125;</span>`</span>);</span><br><span class="line">&#125;;</span><br><span class="line">Admin.prototype.onPublish = <span class="function"><span class="keyword">function</span>(<span class="params">product</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`管理员<span class="subst">$&#123;<span class="built_in">this</span>.name&#125;</span>，有新商品<span class="subst">$&#123;product.name&#125;</span>上架，价格为<span class="subst">$&#123;product.price&#125;</span>`</span>);</span><br><span class="line">&#125;;</span><br><span class="line">Admin.prototype.onPriceChange = <span class="function"><span class="keyword">function</span>(<span class="params">product</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`管理员<span class="subst">$&#123;<span class="built_in">this</span>.name&#125;</span>，商品<span class="subst">$&#123;product.name&#125;</span>价格变更为<span class="subst">$&#123;product.price&#125;</span>`</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Store();</span><br><span class="line"><span class="keyword">const</span> customer = <span class="keyword">new</span> Customer(<span class="string">&#x27;张三&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> admin = <span class="keyword">new</span> Admin(<span class="string">&#x27;李四&#x27;</span>);</span><br><span class="line"></span><br><span class="line">store.addObserver(<span class="string">&#x27;customer&#x27;</span>, customer);</span><br><span class="line">store.addObserver(<span class="string">&#x27;admin&#x27;</span>, admin);</span><br><span class="line"></span><br><span class="line">store.addNewProduct(<span class="string">&#x27;商品1&#x27;</span>, <span class="number">1000</span>);</span><br><span class="line">store.addNewProduct(<span class="string">&#x27;商品2&#x27;</span>, <span class="number">2000</span>);</span><br><span class="line">store.setProductPrice(<span class="string">&#x27;商品1&#x27;</span>, <span class="number">1500</span>);</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式-迭代器</title>
+    <url>/2020/12/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8/</url>
+    <content><![CDATA[<blockquote>
+<p>提供一种方法顺序访问一个聚合对象中的各个元素，而又不需要暴露该对象的内部表示。</p>
+</blockquote>
+<p>迭代器模式可以把迭代的过程从业务逻辑中分离出来，在使用迭代器模式之后，即迭代器模式使不关心对象的内部构造，也可以按顺序访问其中的每个元素。</p>
+<p>JavaScript内置了迭代器，如forEach、map等。</p>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><ol>
+<li>内部迭代器<blockquote>
+<p>内部已经定义好了迭代规则，它完全接手整个迭代过程，外部只需要一次初始调用。</p>
+</blockquote>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> each = <span class="function"><span class="keyword">function</span>(<span class="params">arr, cb</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">    cb(i, arr[i]);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">each([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="function">(<span class="params">index, item</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(index, item);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>优点<br>调用方便，不用关心内部实现，仅在初始调用时做交互。</li>
+<li>缺点<br>内部迭代规则以被提前规定，不利于拓展。</li>
+</ul>
+<ol start="2">
+<li>外部迭代器<blockquote>
+<p>外部迭代器必须显式地请求迭代下一个元素。</p>
+</blockquote>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Iterator</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> current = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">const</span> next = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    current++;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> isDone = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> current &gt;= obj.length;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> getItem = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> obj[current];</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    next,</span><br><span class="line">    isDone,</span><br><span class="line">    getItem,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">compare</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">while</span>(!a.isDone() &amp;&amp; !b.isDone()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (a.getItem() !== b.getItem()) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;a与b不相等&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    a.next();</span><br><span class="line">    b.next();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;a与b相等&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> iterator1 = Iterator([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);</span><br><span class="line"><span class="keyword">const</span> iterator2 = Iterator([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);</span><br><span class="line">compare(iterator1, iterator2);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>ES6实现<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Iterator</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">container</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.list = container.list;</span><br><span class="line">    <span class="built_in">this</span>.index = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">next</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.hasNext()) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">this</span>.list[<span class="built_in">this</span>.index++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">hasNext</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.index &gt;= <span class="built_in">this</span>.list.length) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Container</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">list</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.list = list;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">getTterator</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Iterator(<span class="built_in">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> container = <span class="keyword">new</span> Container([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]);</span><br><span class="line"><span class="keyword">const</span> iterator = container.getIterator();</span><br><span class="line"><span class="keyword">while</span>(iterator.hasNext()) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(iterator.next());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式-模板方法</title>
+    <url>/2020/12/22/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>设计模式概述</title>
+    <url>/2020/12/09/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<p>什么是设计模式</p>
+<blockquote>
+<p>设计模式（Design Pattern），是指在软件设计中，被反复使用的一种代码设计经验。使用设计模式的目的是为了可重用代码，提高代码的可拓展性和可维护性。<br>为什么使用设计模式？<br>软件开发要实现可维护、可拓展，就必须尽可能复用代码，并且降低代码耦合度。</p>
+</blockquote>
+<p>设计模式必须遵循的几个原则：</p>
+<ul>
+<li><p>开闭原则</p>
+<blockquote>
+<p>软件应该对拓展开放，对修改关闭。即更新功能时，能不该代码就尽量不改，如果只新增代码就完成了新功能，那是最好的。</p>
+</blockquote>
+</li>
+<li><p>里氏替换原则</p>
+<blockquote>
+<p>如果我们调用一个父类的方法可以成功，那么替换成子类调用也应该完全可以运行。</p>
+</blockquote>
+</li>
+</ul>
+<p>设计模式分为以下几种类型：</p>
+<ol>
+<li>创建型模式<ul>
+<li>工厂方法</li>
+<li>抽象方法</li>
+<li>生成器</li>
+<li>原型</li>
+<li><a href="/2020/12/09/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BE%8B/" title="设计模式-单例">设计模式-单例</a></li>
+</ul>
+</li>
+<li>结构型模式<ul>
+<li>适配器</li>
+<li>桥接</li>
+<li><a href="/2020/12/22/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88/" title="设计模式-组合">设计模式-组合</a></li>
+<li>装饰器</li>
+<li>外观</li>
+<li>享元</li>
+<li><a href="/2020/12/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86/" title="设计模式-代理">设计模式-代理</a></li>
+</ul>
+</li>
+<li>行为型模式<ul>
+<li>责任链</li>
+<li><a href="/2020/12/22/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%91%BD%E4%BB%A4/" title="设计模式-命令">设计模式-命令</a></li>
+<li>解释器</li>
+<li><a href="/2020/12/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8/" title="设计模式-迭代器">设计模式-迭代器</a></li>
+<li>中介</li>
+<li>备忘录</li>
+<li><a href="/2020/12/22/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85/" title="设计模式-发布订阅">设计模式-发布订阅</a></li>
+<li>状态</li>
+<li><a href="/2020/12/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5/" title="设计模式-策略">设计模式-策略</a></li>
+<li><a href="/2020/12/22/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95/" title="设计模式-模板方法">设计模式-模板方法</a></li>
+<li>访问者</li>
+</ul>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式-策略</title>
+    <url>/2020/12/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5/</url>
+    <content><![CDATA[<blockquote>
+<p>定义一系列的算法，把它们一个个封装起来，并且使它们可相互替换。本模式使得算法可独立于它的客户而变化。</p>
+</blockquote>
+<p>策略模式：strategy，是指，定义一组算法，并把其封装到一个对象中，然后在运行时，可以灵活的使用其中的一个算法。策略模式的目的就是把算法的使用和算法的实现分离开来。</p>
+<p>一个基于策略模式的程序至少由两部分组成。第一部分是一组策略类，策略类封装饿了具体的算法，并负责具体的计算过程。第二部分是环境类context，context接受客户的请求，随后把请求委托给某一个策略类。要实现这一点，说明context中要维持对策略类的引用。</p>
+<h2 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h2><ul>
+<li>计算奖金<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> strategies = &#123;</span><br><span class="line">  S: <span class="function"><span class="params">salary</span> =&gt;</span> salary * <span class="number">4</span>,</span><br><span class="line">  A: <span class="function"><span class="params">salary</span> =&gt;</span> salary * <span class="number">3</span>,</span><br><span class="line">  B: <span class="function"><span class="params">salary</span> =&gt;</span> salary * <span class="number">2</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> calculateBonus = <span class="function">(<span class="params">level, salary</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> strategies[level](salary);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(calculateBonus(<span class="string">&#x27;S&#x27;</span>, <span class="number">10000</span>)); <span class="comment">// 40000</span></span><br><span class="line"><span class="built_in">console</span>.log(calculateBonus(<span class="string">&#x27;A&#x27;</span>, <span class="number">10000</span>)); <span class="comment">// 30000</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ul>
+<li><p>优点</p>
+<ul>
+<li>利用组合、委托和多态等技术和思想，可以有效避免多重条件选择语句。</li>
+<li>提供了开放-封闭原则的完美支持，将算法封装在独立的strategy中，使它们易于切换、理解和拓展。</li>
+<li>可复用</li>
+</ul>
+</li>
+<li><p>缺点</p>
+<ul>
+<li>要使用策略模式，必须了解所有的strategy，了解各个strategy之间的不同点，这样才能选择一个合适的strategy。</li>
+<li>会增加策略类或者策略对象。</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式-组合</title>
+    <url>/2020/12/22/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+</search>
